@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using NewHRProject.Dto;
 using NewHRProject.Services;
+using System.Collections.Generic;
 
 namespace NewHRProject.Controllers;
 
@@ -7,9 +9,45 @@ namespace NewHRProject.Controllers;
 [Route("api/[controller]/[action]")]
 public class UserController : ControllerBase
 {
-    private readonly IUserService _iUserService;
-    public UserController(IUserService iUserService)
+    private readonly IUserService _userService;
+    public UserController(IUserService userService)
     {
-        _iUserService = iUserService;
+        _userService = userService;
+    }
+
+    [HttpPost]
+    public async Task UploadUserData(List<UserDataDto> input)
+    {
+        await _userService.UploadUserData(input);
+    }
+
+    [HttpPost]
+    public async Task UploadUserScores(List<UserScoresDto> input)
+    {
+        await _userService.UploadUserScores(input);
+    }
+
+    [HttpGet]
+    public async Task<List<ScoresByDayResponse>> GetScoresByDay(DateTime date)
+    {
+        return await _userService.GetScoresByDay(date);
+    }
+
+    [HttpGet]
+    public async Task<List<ScoresByDayResponse>> GeScoresByMonth(DateTime date)
+    {
+        return await _userService.GeScoresByMonth(date);
+    }
+
+    [HttpGet]
+    public async Task GetStats()
+    {
+        await _userService.GetStats();
+    }
+
+    [HttpGet]
+    public async Task<UserInfoDto> GetUserInfo(int userId)
+    {
+        return await _userService.GetUserInfo(userId);
     }
 }

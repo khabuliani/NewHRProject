@@ -4,7 +4,6 @@ namespace NewHRProject.Services;
 
 public interface IUserService
 {
-    public Task UploadLeaderboardData();
     public Task UploadUserScores(List<UserScoresDto> input);
     public Task UploadUserData(List<UserDataDto> input);
     public Task<List<ScoresByDayResponse>> GetScoresByDay(DateTime date);

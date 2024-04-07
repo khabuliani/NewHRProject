@@ -6,7 +6,7 @@ go
 
 CREATE TABLE [dbo].[Users] (
     Id INT NOT NULL PRIMARY KEY IDENTITY(1, 1),
-    UserName VARCHAR(255) NOT NULL,
+    UserName VARCHAR(255) NOT NULL UNIQUE,
     FirstName VARCHAR(255) NOT NULL,
     LastName VARCHAR(255) NOT NULL,
     CreationDate DATETIME NOT NULL
@@ -29,15 +29,17 @@ GO
 
 
 
-use [NewHRProjectDb]
-Go
-CREATE PROCEDURE GetUserRank
-    @UserId INT
+Use [NewHRProjectDb]
+Go 
+CREATE PROCEDURE GetUserRankAndTotalScore
+    @UserId INT,
+    @Rank INT OUTPUT,
+    @TotalScore FLOAT OUTPUT
 AS
 BEGIN
     SET NOCOUNT ON;
 
-    WITH ScoreTotals AS (
+    WITH MonthlyScores AS (
         SELECT
             [dbo].[UserScores].[UserId],
             SUM([dbo].[UserScores].[Score]) AS TotalScore
@@ -49,18 +51,19 @@ BEGIN
         GROUP BY
             [dbo].[UserScores].[UserId]
     ),
-    RankedScores AS (
+    ScoreRanks AS (
         SELECT
             UserId,
             TotalScore,
-            RANK() OVER (ORDER BY TotalScore DESC) AS Rank
+            RANK() OVER (ORDER BY TotalScore DESC) AS UserRank
         FROM
-            ScoreTotals
+            MonthlyScores
     )
     SELECT
-        Rank
+        @Rank = UserRank,
+        @TotalScore = TotalScore
     FROM
-        RankedScores
+        ScoreRanks
     WHERE
         UserId = @UserId;
 END
