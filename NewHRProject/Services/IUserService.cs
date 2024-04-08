@@ -9,6 +9,7 @@ public interface IUserService
     public Task<List<ScoresByDayResponse>> GetScoresByDay(DateTime date);
     public Task<List<ScoresByDayResponse>> GeScoresByMonth(DateTime date);
     public Task<List<ScoresByDayResponse>> GetAllData();
-    public Task GetStats();
+    public Task<GetStatsDto> GetStats();
+    public Task<GetStatsDto> GetStatsForOneUser();
     public Task<UserInfoDto> GetUserInfo(int userId);
 }

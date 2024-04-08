@@ -40,9 +40,21 @@ public class UserController : ControllerBase
     }
 
     [HttpGet]
-    public async Task GetStats()
+    public async Task<List<ScoresByDayResponse>> GetAllData()
     {
-        await _userService.GetStats();
+        return await _userService.GetAllData();
+    }
+
+    [HttpGet]
+    public async Task<GetStatsDto> GetStats()
+    {
+        return await _userService.GetStats();
+    }
+
+    [HttpGet]
+    public async Task<GetStatsDto> GetStatsForOneUser()
+    {
+        return await _userService.GetStatsForOneUser();
     }
 
     [HttpGet]
